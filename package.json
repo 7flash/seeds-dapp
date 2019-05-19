@@ -7,10 +7,8 @@
     "ghp-build": "parcel build ./src/index.html --out-dir build/ --public-url ./build && cp ./build/index.html ./index.html"
   },
   "dependencies": {
-    "hyperapp": "beta",
-    "ramda": "^0.26.1"
-  },
-  "devDependencies": {
+    "hyperapp": "2.0.0-beta.12",
+    "ramda": "^0.26.1",
     "parcel": "beta",
     "hyperapp-redux-devtools": "^1.1.6"
   }

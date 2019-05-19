@@ -12,7 +12,6 @@ app({
     state,
     effects.initWallet({ action: actions.initWallet.done }),
     effects.updateStats({ action: actions.updateStats.done })
-
   ]),
   view: state =>
     h('section', {}, [

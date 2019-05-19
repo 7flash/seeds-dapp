@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import blockchain from '../modules/blockchain';
 
-const initWallet = ({ action }, dispatch) => {
+const initWallet = (dispatch, { action }) => {
   let privateKey = localStorage.getItem('privateKey')
   let accountName = localStorage.getItem('accountName')
 
@@ -16,42 +16,42 @@ const initWallet = ({ action }, dispatch) => {
   dispatch(action, { privateKey, accountName })
 }
 
-const updateAccountInfo = ({ accountName, action }, dispatch) => {
+const updateAccountInfo = (dispatch, { accountName, action }) => {
   const result = blockchain.getAccountInfo(accountName)
 
   dispatch(action, result)
 }
 
-const updateStats = ({ action }, dispatch) => {
+const updateStats = (dispatch, { action }) => {
   const result = blockchain.getStats()
 
   dispatch(action, result)
 }
 
-const createAccount = ({ accountName, action }, dispatch) => {
+const createAccount = (dispatch, { accountName, action }) => {
   localStorage.setItem('accountName', accountName)
   dispatch(action, { accountName, transactionId: 'create-account-transaction' })
 }
 
-const transferSeeds = ({ account, amount, action }, dispatch) => {
+const transferSeeds = (dispatch, { account, amount, action }) => {
   dispatch(action, {
     transactionId: 'transfer-seeds-transaction'
   })
 }
 
-const plantSeeds = ({ amount, action }, dispatch) => {
+const plantSeeds = (dispatch, { amount, action }) => {
   dispatch(action, {
     transactionId: 'plant-seeds-transaction'
   })
 }
 
-const increaseSubscription = ({ amount, action }, dispatch) => {
+const increaseSubscription = (dispatch, { amount, action }) => {
   dispatch(action, {
     transactionId: 'increase-subscription-transaction'
   })
 }
 
-const everySecond = ({ action }, dispatch) => {
+const everySecond = (dispatch, { action }) => {
   const id = setInterval(() => {
     dispatch(action)
   }, 1000)
@@ -61,7 +61,7 @@ const everySecond = ({ action }, dispatch) => {
   }
 }
 
-const everyMinute = ({ action }, dispatch) => {
+const everyMinute = (dispatch, { action }) => {
   const id = setInterval(() => {
     dispatch(action)
   }, 60 * 1000)
