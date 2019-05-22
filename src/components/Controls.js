@@ -1,22 +1,30 @@
 import { h } from 'hyperapp';
 
 const Controls = ({
-                    wallet: { accountName },
+                    wallet: { accountName, status },
                     formFields: {
                       accountNameField,
                       plantAmountField,
+                      unplantAmountField,
                       transferAmountField,
                       transferAccountField,
-                      subscribeAmountField
-                    }
-                  }, {
+                      subscribeAmountField,
+                      claimAmountField
+                    } },
+                  {
                     updateFormField,
-                    createAccount,
-                    transferSeeds,
-                    plantSeeds,
-                    increaseSubscription
+                    wallet: {
+                      requested: createAccount
+                    },
+                    transactions: {
+                      transferSeeds,
+                      plantSeeds,
+                      unplantSeeds,
+                      increaseSubscription,
+                      claimReward
+                    }
 }) => (
-  accountName ? [
+  status == 'created' ? [
     [
       h('h3', {}, '2. Transfer'),
       h('input', {
@@ -35,7 +43,7 @@ const Controls = ({
         oninput: updateFormField('transferAccountField')
       }),
       h('button', {
-        onclick: [transferSeeds.request, {
+        onclick: [transferSeeds, {
           amount: transferAmountField,
           account: transferAccountField
         }]
@@ -52,12 +60,40 @@ const Controls = ({
         oninput: updateFormField('plantAmountField')
       }),
       h('button', {
-        onclick: [plantSeeds.request, plantAmountField]
+        onclick: [plantSeeds, plantAmountField]
       }, 'Send transaction')
     ],
     h('hr'),
     [
-      h('h3', {}, '4. Increase subscription'),
+      h('h3', {}, '4. Unplant seeds'),
+      h('input', {
+        type: 'number',
+        step: "0.0001",
+        placeholder: 'Seeds amount (1.0000)',
+        value: unplantAmountField,
+        oninput: updateFormField('unplantAmountField')
+      }),
+      h('button', {
+        onclick: [unplantSeeds, unplantAmountField]
+      }, 'Send transaction')
+    ],
+    h('hr'),
+    [
+      h('h3', {}, '5. Claim reward'),
+      h('input', {
+        type: 'number',
+        step: '0.0001',
+        placeholder: 'Seeds amount (1.0000)',
+        value: claimAmountField,
+        oninput: updateFormField('claimAmountField')
+      }),
+      h('button', {
+        onclick: [claimReward, claimAmountField]
+      }, 'Send transaction')
+    ],
+    h('hr'),
+    [
+      h('h3', {}, '6. Increase subscription'),
       h('input', {
         type: 'number',
         step: '0.0001',
@@ -66,7 +102,7 @@ const Controls = ({
         oninput: updateFormField('subscribeAmountField')
       }),
       h('button', {
-        onclick: [increaseSubscription.request, [subscribeAmountField]]
+        onclick: [increaseSubscription, subscribeAmountField]
       }, 'Send transaction')
     ],
     h('hr')
@@ -80,7 +116,9 @@ const Controls = ({
       value: accountNameField,
       oninput: updateFormField('accountNameField')
     }),
-    h('button', { onclick: [createAccount.request, accountNameField] }, 'Send transaction'),
+    status == 'requested' ?
+      h('h3', {}, 'Please wait for approval, do not refresh page...') :
+      h('button', { onclick: [createAccount, accountNameField] }, 'Send transaction'),
     h('hr')
   ]);
 

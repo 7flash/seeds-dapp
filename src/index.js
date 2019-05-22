@@ -10,8 +10,8 @@ import { Loader, Wallet, Controls, Notifications, Stats } from './components'
 app({
   init: () => ([
     state,
-    effects.initWallet({ action: actions.initWallet.done }),
-    effects.updateStats({ action: actions.updateStats.done })
+    effects.setupContracts({ action: actions.stats.ready }),
+    effects.setupWallet({ loaded: actions.wallet.loaded, generated: actions.wallet.generated })
   ]),
   view: state =>
     h('section', {}, [
@@ -27,9 +27,10 @@ app({
           ] : Loader('Generating wallet')
       )
     ]),
-  subscriptions: () => [
-    effects.everySecond({ action: actions.updateHarvestTime }),
-    effects.everyMinute({ action: actions.updateAccountInfo.request })
+  subscriptions: (state) => [
+    state.stats.ready &&
+    effects.everyBlocks({ blocksNumber: 10, actions: [ actions.onblock.stats, actions.onblock.account ] }) &&
+    effects.everyBlocks({ blockNumber: 2, actions: [ actions.onblock.harvest ] })
   ],
   node: document.getElementById("app")
 })

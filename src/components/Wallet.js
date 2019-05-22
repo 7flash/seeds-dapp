@@ -5,16 +5,23 @@ const Wallet = ({
                     privateKey,
                     accountName,
                     balance,
-                    stake,
+                    harvest,
                     subscription
                   }
 }) => [
   h('h3', {}, 'Your wallet'),
   h('h4', {}, `Private key: ${privateKey}`),
   accountName && h('h4', {}, `Account: ${accountName}`),
-  accountName && h('h4', {}, `Balance: ${balance} Seeds`),
-  accountName && h('h4', {}, `Stake: ${stake} Seeds`),
-  accountName && h('h4', {}, `Subscription: ${subscription} seeds / minute`),
+  accountName && h('h4', {}, `Balance: ${balance}`),
+  h('h3', {}, 'Your harvest'),
+  accountName && h('h4', {}, `Planted amount: ${harvest.planted}`),
+  accountName && h('h4', {}, `Available reward: ${harvest.reward}`),
+  h('h3', {}, 'Your subscription'),
+  accountName && h('h4', {}, `Price per block: ${subscription.price}`),
+  accountName && h('h4', {}, `Active: ${subscription.active}`),
+  accountName && h('h4', {}, `Deposit: ${subscription.deposit}`),
+  accountName && h('h4', {}, `Invoice: ${subscription.invoice}`),
+  accountName && h('h4', {}, `Total: ${subscription.total}`),
   h('hr')
 ]
 
